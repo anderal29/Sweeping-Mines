@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=main
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ main\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ Main\ class\ that\ handles\ map\ generation,\ as\ well\ as\ singleplay\ turns.\r\n\r\n\ @Alex\ (your\ name)\r\n\ @1.6.23\ SweepingMines_V1_Mapgen\r\n
 comment1.params=
 comment1.target=main()
 comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ main\r\n

@@ -1,12 +1,13 @@
 
 /**
- * Write a description of class main here.
+ * Main class that handles map generation, as well as singleplay turns.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @Alex (your name)
+ * @1.6.23 SweepingMines_V1_Mapgen
  */
 public class main
 {
+    //variables for map generation
    public int mineCount;
    public char map[][];
    public char playersMap[][];
@@ -15,6 +16,7 @@ public class main
      */
     public main()
     {
+        //creates map
         map = new char[18][14];
         playersMap = new char[18][14];
         generateMap(4,4);
@@ -24,6 +26,8 @@ public class main
     }
     
     public void drawMap(){
+        
+        //prints out map
         for(int y=0;y<14;y++){
             for(int x=0;x<18;x++){
                 System.out.print(map[x][y]);
