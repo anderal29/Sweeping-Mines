@@ -31,9 +31,6 @@ public class main
             }
             System.out.println();
         }
-        
-        
-
     }
     public void generateMap(int xStart,int yStart)
     {   
