@@ -18,9 +18,7 @@ public class main
     //declare variables used for player turn input
     public int playerSelectX;
     public int playerSelectY;
-    private boolean commaFound = false;
     private boolean gameEnded;
-    private int letterUpTo;
     Scanner input = new Scanner(System.in);
     /**
      * Constructor for objects of class main
@@ -32,39 +30,70 @@ public class main
         map = new char[18][14];
         playersMap = new char[18][14];
         
+        getPlayerInput();
         //rough draft of player input just for testing. Will clean up later.
-        System.out.println("Type the x coordinate of where you want to uncover. (eg: '5')");
-        System.out.println("NOTE: 0 is the leftmost coordinate");
-        playerSelectX = input.nextInt();
-        System.out.println("Type the y coordinate of where you want to uncover. (eg: '5')");
-        System.out.println("NOTE: 0 is the leftmost coordinate");
-        playerSelectY = input.nextInt(); 
-        generateMap(playerSelectX,playerSelectY);
-        playTurn(playerSelectX,playerSelectY); 
+        //System.out.println("Type the x coordinate of where you want to uncover. (eg: '5')");
+        //System.out.println("NOTE: 0 is the leftmost coordinate");
+        //playerSelectX = input.nextInt();
+        //System.out.println("Type the y coordinate of where you want to uncover. (eg: '5')");
+       // System.out.println("NOTE: 0 is the leftmost coordinate");
+       // playerSelectY = input.nextInt(); 
+       // generateMap(playerSelectX,playerSelectY);
+       // playTurn(playerSelectX,playerSelectY); 
         
+        
+       // playerSelectX = input.nextInt();
+            
+        
+       // System.out.println("Type the y coordinate of where you want to uncover. (eg: '5')");
+        //System.out.println("NOTE: 0 is the leftmost coordinate");
+        //playerSelectY = input.nextInt(); 
+         
+       // playTurn(playerSelectX,playerSelectY); 
         //takes players input, then passes it through playTurn function. 
-        while(!gameEnded){
-            System.out.println("To uncover a square, please type the x coordinate, then the y coordinate seperated by a comma. (eg: 6,4)");
-            System.out.println("NOTE: 0 is the leftmost coordinate");
-            
-            commaFound = false;
-            letterUpTo = 0;
-            while(!commaFound){
-                
-            }
-            
-            playerSelectX = input.nextInt();
-            
-        
-            System.out.println("Type the y coordinate of where you want to uncover. (eg: '5')");
-            System.out.println("NOTE: 0 is the leftmost coordinate");
-            playerSelectY = input.nextInt(); 
-            
-           playTurn(playerSelectX,playerSelectY); 
-        }
+
         
         
     }
+    
+    public void getPlayerInput(){
+        
+            System.out.println("To uncover a square, please type the x coordinate, then the y coordinate seperated by a comma. (eg: 6,4)");
+            System.out.println("NOTE: 0 is the leftmost coordinate");
+            
+            String playerInput = input.nextLine();
+            boolean commaFound = false;
+            String first = "";
+            String last = "";
+            int letterUpTo = 0;
+            while((!commaFound)&&(letterUpTo < playerInput.length())){
+                if(playerInput.charAt(letterUpTo) == ','){
+                    commaFound = true;
+                    
+                    for(int i = 0;i < letterUpTo;i++){
+                        first += playerInput.charAt(i);
+                    }
+                    System.out.println(first);
+                    for(int i = letterUpTo+1;i < playerInput.length();i++){
+                        last += playerInput.charAt(i);
+                    }
+                    System.out.println(last);
+                    //verifyInput(letterUpTo,);
+                   
+                }
+                letterUpTo++;
+            }
+            if(letterUpTo < playerInput.length()){
+                System.out.println("Error: Please seperate the two coordinates with a comma.");
+            }
+            
+            
+            
+
+        
+    }
+    
+    //public void verifyInput(commaIndex,firstHalf,secondHalf
     
     public void drawMap(){
         //displays the map
