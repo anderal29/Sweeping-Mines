@@ -19,6 +19,7 @@ public class main
     public int playerSelectX;
     public int playerSelectY;
     public int turnCount = 0;
+    public boolean gamePlay = true;
     private boolean gameEnded;
     Scanner input = new Scanner(System.in);
     /**
@@ -31,6 +32,12 @@ public class main
         map = new char[18][14];
         playersMap = new char[18][14];
         
+        for(int x=0;x<18;x++){
+           for(int y=0;y<14;y++){
+               playersMap[x][y] = '■';
+           }
+        }
+        drawMap();
         getPlayerInput();
         //rough draft of player input just for testing. Will clean up later.
         //System.out.println("Type the x coordinate of where you want to uncover. (eg: '5')");
@@ -58,10 +65,8 @@ public class main
     }
     
     public void getPlayerInput(){
-        
-            System.out.println("To uncover a square, please type the x coordinate, then the y coordinate seperated by a comma. (eg: 6,4)");
-            System.out.println("NOTE: 0 is the leftmost coordinate");
-            
+            System.out.println();
+            System.out.println("To uncover a square, please type the x coordinate, then the y coordinate seperated by a comma. (eg: 6,4)");            
             String playerInput = input.nextLine();
             boolean commaFound = false;
             String first = "";
@@ -70,23 +75,19 @@ public class main
             while((!commaFound)&&(letterUpTo < playerInput.length())){
                 if(playerInput.charAt(letterUpTo) == ','){
                     commaFound = true;
-                    
                     for(int i = 0;i < letterUpTo;i++){
                         first += playerInput.charAt(i);
                     }
-                    System.out.println(first);
                     for(int i = letterUpTo+1;i < playerInput.length();i++){
                         last += playerInput.charAt(i);
                     }
-                    System.out.println(last);
                     verifyInput(first,last);
-                    //verifyInput(letterUpTo,);
-                   
                 }
                 letterUpTo++;
             }
             if((letterUpTo <= playerInput.length())&&(!commaFound)){
                 System.out.println("Error: Please seperate the two coordinates with a comma.");
+                getPlayerInput();
             }
             
             
@@ -95,11 +96,12 @@ public class main
         
     }
     
+ 
+    
     public void verifyInput(String firstHalf,String secondHalf){
         int x;
         int y;
-        if(((firstHalf.chars().allMatch(Character::isDigit))&&(firstHalf != ""))&&((secondHalf.chars().allMatch(Character::isDigit)&&(secondHalf != "")))){
-            System.out.println("SAFE");
+        if((((firstHalf.chars().allMatch(Character::isDigit))&&(firstHalf != ""))&&((secondHalf.chars().allMatch(Character::isDigit)&&(secondHalf != "")))&&((firstHalf.length() <= 2)&&(secondHalf.length() <= 2)))){
             x = Integer.parseInt(firstHalf);
             y = Integer.parseInt(secondHalf);
             if((x<18)&&(y<14)){
@@ -107,10 +109,9 @@ public class main
                    generateMap(x,y); 
                 }
                 playTurn(x,y);
-                turnCount++;
+          
             }else{
-                System.out.println("Please choose coordinates inbetween 0 - 17, and 0 - 14.");
-                getPlayerInput();
+                System.out.println("Please choose coordinates inbetween 0 - 17, and 0 - 13.");
             }
             
             getPlayerInput();
@@ -121,6 +122,7 @@ public class main
     }
     
     public void drawMap(){
+        System.out.print('\u000C');
         //displays the map
         
         //formats and displays collumn numbers
@@ -219,11 +221,13 @@ public class main
             //player has found a mine, they lost.
             System.out.println("YOU LOST");
             playersMap = map;
+            turnCount++;
             drawMap();
             //stops turn looping
             gameEnded=true;
         }else if(map[clickedX][clickedY] == '■'){
             //start recursive function which discovers and uncovers empty squares until it finds a number on all sides.
+            turnCount++;
             discoverSquares(clickedX,clickedY);
             drawMap();
         }else if(map[clickedX][clickedY] == '□'){
@@ -231,7 +235,7 @@ public class main
             System.out.println("You've already searched there. Please try again");
         }else{
             //if a player selects a number, just that number will show.
-            System.out.println("number");
+            turnCount++;
             playersMap[clickedX][clickedY] = map[clickedX][clickedY];
             drawMap();
         }
