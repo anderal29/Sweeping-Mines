@@ -18,6 +18,7 @@ public class main
     //declare variables used for player turn input
     public int playerSelectX;
     public int playerSelectY;
+    public int turnCount = 0;
     private boolean gameEnded;
     Scanner input = new Scanner(System.in);
     /**
@@ -78,12 +79,13 @@ public class main
                         last += playerInput.charAt(i);
                     }
                     System.out.println(last);
+                    verifyInput(first,last);
                     //verifyInput(letterUpTo,);
                    
                 }
                 letterUpTo++;
             }
-            if(letterUpTo < playerInput.length()){
+            if((letterUpTo <= playerInput.length())&&(!commaFound)){
                 System.out.println("Error: Please seperate the two coordinates with a comma.");
             }
             
@@ -93,7 +95,30 @@ public class main
         
     }
     
-    //public void verifyInput(commaIndex,firstHalf,secondHalf
+    public void verifyInput(String firstHalf,String secondHalf){
+        int x;
+        int y;
+        if(((firstHalf.chars().allMatch(Character::isDigit))&&(firstHalf != ""))&&((secondHalf.chars().allMatch(Character::isDigit)&&(secondHalf != "")))){
+            System.out.println("SAFE");
+            x = Integer.parseInt(firstHalf);
+            y = Integer.parseInt(secondHalf);
+            if((x<18)&&(y<14)){
+                if(turnCount==0){
+                   generateMap(x,y); 
+                }
+                playTurn(x,y);
+                turnCount++;
+            }else{
+                System.out.println("Please choose coordinates inbetween 0 - 17, and 0 - 14.");
+                getPlayerInput();
+            }
+            
+            getPlayerInput();
+        }else{
+            System.out.println("Please re-enter your turn. It cannot contain letters or brackets, just numbers.");
+            getPlayerInput();
+        }
+    }
     
     public void drawMap(){
         //displays the map
