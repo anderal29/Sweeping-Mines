@@ -8,6 +8,8 @@
 
 //import package for input reading.
 import java.util.Scanner;
+
+//this class creates the objects for the arrays used as maps, as well as setting the players map to a grid of unchecked boxes to start before getting players input.
 public class main
 {
     
@@ -15,16 +17,12 @@ public class main
     public int mineCount;
     public char map[][];
     public char playersMap[][];
-    //declare variables used for player turn input
-    public int playerSelectX;
-    public int playerSelectY;
+    //declare variables used stats, and game checking functions.
     public int turnCount = 0;
-    public boolean gamePlay = true;
     private boolean gameEnded;
+    //creates object for keyboard input
     Scanner input = new Scanner(System.in);
-    /**
-     * Constructor for objects of class main
-     */
+    
     public main()
     {
         
@@ -39,28 +37,6 @@ public class main
         }
         drawMap();
         getPlayerInput();
-        //rough draft of player input just for testing. Will clean up later.
-        //System.out.println("Type the x coordinate of where you want to uncover. (eg: '5')");
-        //System.out.println("NOTE: 0 is the leftmost coordinate");
-        //playerSelectX = input.nextInt();
-        //System.out.println("Type the y coordinate of where you want to uncover. (eg: '5')");
-       // System.out.println("NOTE: 0 is the leftmost coordinate");
-       // playerSelectY = input.nextInt(); 
-       // generateMap(playerSelectX,playerSelectY);
-       // playTurn(playerSelectX,playerSelectY); 
-        
-        
-       // playerSelectX = input.nextInt();
-            
-        
-       // System.out.println("Type the y coordinate of where you want to uncover. (eg: '5')");
-        //System.out.println("NOTE: 0 is the leftmost coordinate");
-        //playerSelectY = input.nextInt(); 
-         
-       // playTurn(playerSelectX,playerSelectY); 
-        //takes players input, then passes it through playTurn function. 
-
-        
         
     }
     
@@ -86,7 +62,7 @@ public class main
                 letterUpTo++;
             }
             if((letterUpTo <= playerInput.length())&&(!commaFound)){
-                System.out.println("Error: Please seperate the two coordinates with a comma.");
+                System.out.println("Please try again: seperate the two coordinates with a comma.");
                 getPlayerInput();
             }
             
@@ -114,11 +90,14 @@ public class main
                 System.out.println("Please choose coordinates inbetween 0 - 17, and 0 - 13.");
             }
             
-            getPlayerInput();
+            
         }else{
             System.out.println("Please re-enter your turn. It cannot contain letters or brackets, just numbers.");
+        }
+        if(!gameEnded){
             getPlayerInput();
         }
+        
     }
     
     public void drawMap(){
@@ -172,7 +151,7 @@ public class main
         //player clicked.
         int randomY;
         int randomX;
-        System.out.println("clicked at: "+xStart+","+yStart);
+        //System.out.println("clicked at: "+xStart+","+yStart);
         for(int minesUnplaced=32;minesUnplaced>0;minesUnplaced--){
             randomX = (int)Math.floor(Math.random()*18);
             randomY = (int)Math.floor(Math.random()*14);
@@ -219,10 +198,11 @@ public class main
         //tests to see where player clicked
         if(map[clickedX][clickedY] == 'o'){
             //player has found a mine, they lost.
-            System.out.println("YOU LOST");
+           
             playersMap = map;
             turnCount++;
             drawMap();
+             System.out.println("YOU LOST");
             //stops turn looping
             gameEnded=true;
         }else if(map[clickedX][clickedY] == '■'){
@@ -232,6 +212,9 @@ public class main
             drawMap();
         }else if(map[clickedX][clickedY] == '□'){
             //player has selected an already empty square
+            System.out.println("You've already searched there. Please try again");
+        }else if(playersMap[clickedX][clickedY] != '■'){
+            //if player has selected a number that's already shown.
             System.out.println("You've already searched there. Please try again");
         }else{
             //if a player selects a number, just that number will show.
