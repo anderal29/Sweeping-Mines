@@ -153,6 +153,7 @@ public class main
         }
     }
     
+    //generates map with mines around where player clicks.
     public void generateMap(int xStart,int yStart)
     {   
         //generate empty map with no mines
@@ -189,16 +190,17 @@ public class main
         
         //generates the numbers around each mine by passing it through a function
         for(int x=0;x<18;x++){
-           for(int y=0;y<14;y++){
-               //if the square's a mine, generate numbers around.
-               if(map[x][y] == 'o'){
-                   genNumbersAround(x,y);
-               }
-           }
+            for(int y=0;y<14;y++){
+                //if the square's a mine, generate numbers around.
+                if(map[x][y] == 'o'){
+                    genNumbersAround(x,y);
+                }
+            }
         }
         
     }
     
+    //function that generates numbers around mines on the map.
     public void genNumbersAround(int x,int y){
         //for loop checks each slot in 3x3 grid around current mine
         for(int i=x-1 ; i<=x+1 ; i++){
@@ -217,6 +219,7 @@ public class main
         }
     }
     
+    //this function processes the turn with checks to see what the player has uncovered.
     public void playTurn(int clickedX,int clickedY){
         //tests to see where player clicked
         if(map[clickedX][clickedY] == 'o'){
@@ -248,14 +251,11 @@ public class main
         }
     }
     
+    //start recursive function which discovers and uncovers empty squares until it finds a number on all sides.
     public void discoverSquares(int originX,int originY){
-        
-        //start recursive function which discovers and uncovers empty squares until it finds a number on all sides.
-        
         //uncovers selected square.
         playersMap[originX][originY] = '□';
         map[originX][originY] = '□';
-        
         
         //scans all neighbouring squares, 
         for(int i=originX-1 ; i<=originX+1 ; i++){
@@ -263,7 +263,7 @@ public class main
                 //if scanned square is not over the edge of the map, then continue
                 if(((i>=0)&&(t>=0))&&((i<18)&&(t<14))){
                     if(map[i][t] == '■'){
-                        //if they are antnother empty square then run this function again with that square
+                        //if it is another empty square then run this function again with that square
                         map[i][t] = '□';
                         playersMap[i][t] = '□';
                         discoverSquares(i,t);
@@ -274,12 +274,10 @@ public class main
                 }
             }
         }
-        
     }
-        
+    
+    //function that takes in an x and y, then another x and y, and says if the two are adajacent to eachother.
     public boolean isAdjacent(int x,int y,int targetX,int targetY){
-        //function that takes in an x and y, then another x and y, and says if the two are adajacent to eachother.
-        
         //scans all neighbouring squares around first x and y
         for(int i=x-1 ; i<=x+1 ; i++){
             for(int t=y-1 ; t<=y+1 ; t++){
