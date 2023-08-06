@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=main
+comment1.params=
+comment1.target=main()
+comment2.params=
+comment2.target=void\ getPlayerInput()
+comment3.params=firstHalf\ secondHalf
+comment3.target=void\ verifyInput(java.lang.String,\ java.lang.String)
+comment4.params=
+comment4.target=void\ drawMap()
+comment5.params=xStart\ yStart
+comment5.target=void\ generateMap(int,\ int)
+comment6.params=x\ y
+comment6.target=void\ genNumbersAround(int,\ int)
+comment7.params=clickedX\ clickedY
+comment7.target=void\ playTurn(int,\ int)
+comment8.params=originX\ originY
+comment8.target=void\ discoverSquares(int,\ int)
+comment9.params=x\ y\ targetX\ targetY
+comment9.target=boolean\ isAdjacent(int,\ int,\ int,\ int)
+numComments=10
