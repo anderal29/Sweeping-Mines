@@ -36,7 +36,7 @@ public class main
                playersMap[x][y] = '■';
            }
         }
-        playersMap[4][4] = '◘';
+ 
         //displays map, then asks for players input.
         drawMap();
         getPlayerInput();
@@ -88,16 +88,25 @@ public class main
     public void verifyInput(String firstHalf,String secondHalf){
         int x;
         int y;
-        boolean flagCheck;
-        
+        boolean flagCheck = false;
+
         if((firstHalf.charAt(0) == 'f')){
+            String newFirst = "";
             flagCheck = true;
             if(firstHalf.charAt(1) == ' '){
-                
+                for(int i = 2;i < firstHalf.length();i++){
+                     newFirst += firstHalf.charAt(i);
+                }
+            }else{
+                for(int i = 1;i < firstHalf.length();i++){
+                     newFirst += firstHalf.charAt(i);
+                }
             }
-        }else{
-            
+            firstHalf = newFirst;
+            System.out.println(firstHalf);
         }
+        
+        
         //checks that both coordinates are digits, and aren't empty. 
         //also checks that the string length is two or less so it can be converted to int without error.
         if((((firstHalf.chars().allMatch(Character::isDigit))&&(firstHalf != ""))&&((secondHalf.chars().allMatch(Character::isDigit)&&(secondHalf != "")))&&((firstHalf.length() <= 2)&&(secondHalf.length() <= 2)))){
@@ -107,12 +116,22 @@ public class main
             //checks they aren't to big for the map.
             if((x<18)&&(y<14)){
                 //if it is the first turn, passes through function that generates map.
-                if(turnCount==0){
-                   generateMap(x,y); 
-                }
+                
                 //passes turn to function that changes the map.
-                playTurn(x,y);
-          
+                if(flagCheck){
+                    playersMap[x][y] = '◘';
+                    drawMap();
+                }else{
+                    
+                    if(turnCount==0){
+                       generateMap(x,y); 
+                       System.out.println("First");
+                    }
+                    playTurn(x,y);
+                    
+                }   
+                
+                      
             }else{
                 //if inputs are out of map bounds, reask.
                 System.out.println("Please choose coordinates inbetween 0 - 17, and 0 - 13.");
