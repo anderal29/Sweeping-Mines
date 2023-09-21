@@ -103,7 +103,6 @@ public class main
                 }
             }
             firstHalf = newFirst;
-            System.out.println(firstHalf);
         }
         
         
@@ -123,7 +122,12 @@ public class main
                        playersMap[x][y] = '◘'; 
                        drawMap();
                     }else{
-                        System.out.println("You already have uncovered that, try placing a flag somewhere else!");
+                        if(playersMap[x][y] == '◘'){
+                            playersMap[x][y] = '■';
+                            drawMap();
+                        }else{
+                            System.out.println("You already have uncovered that, try placing a flag somewhere else!");
+                        }
                     }
                     
                     
@@ -131,7 +135,7 @@ public class main
                     //if it is the first turn, passes through function that generates map.
                     if(turnCount==0){
                        generateMap(x,y); 
-                       System.out.println("First");
+                     
                     }
                     playTurn(x,y);
                     
@@ -207,7 +211,7 @@ public class main
         int randomX;
         //System.out.println("clicked at: "+xStart+","+yStart);
         //while all mines aren't placed yet, try to set different map spots to a mine, if it's not adjacent or where player clicked.
-        for(int minesUnplaced=42;minesUnplaced>0;minesUnplaced--){
+        for(int minesUnplaced=20;minesUnplaced>0;minesUnplaced--){
             //generate random x and y in map bounds
             randomX = (int)Math.floor(Math.random()*18);
             randomY = (int)Math.floor(Math.random()*14);
