@@ -115,14 +115,20 @@ public class main
             y = Integer.parseInt(secondHalf);
             //checks they aren't to big for the map.
             if((x<18)&&(y<14)){
-                //if it is the first turn, passes through function that generates map.
+                
                 
                 //passes turn to function that changes the map.
                 if(flagCheck){
-                    playersMap[x][y] = '◘';
-                    drawMap();
-                }else{
+                    if(playersMap[x][y] == '■'){
+                       playersMap[x][y] = '◘'; 
+                       drawMap();
+                    }else{
+                        System.out.println("You already have uncovered that, try placing a flag somewhere else!");
+                    }
                     
+                    
+                }else{
+                    //if it is the first turn, passes through function that generates map.
                     if(turnCount==0){
                        generateMap(x,y); 
                        System.out.println("First");
@@ -266,12 +272,16 @@ public class main
             turnCount++;
             discoverSquares(clickedX,clickedY);
             drawMap(); 
-        }else if(map[clickedX][clickedY] == '□'){
-            //player has selected an already empty square
-            System.out.println("You've already searched there. Please try again");
-        }else if(playersMap[clickedX][clickedY] != '■'){
-            //if player has selected a number that's already shown.
-            System.out.println("You've already searched there. Please try again");
+        }else if((map[clickedX][clickedY] == '□')||(playersMap[clickedX][clickedY] != '■')){
+            //player has selected an already empty square OR player has selected a flag over a number
+            if(playersMap[clickedX][clickedY] != '◘'){
+                System.out.println("You've already searched there. Please try again (CODE FLAG)");
+            }else{
+                turnCount++;
+                playersMap[clickedX][clickedY] = map[clickedX][clickedY];
+                drawMap();
+            }
+            
         }else{
             //if a player selects a number, just that number will show.
             turnCount++;
