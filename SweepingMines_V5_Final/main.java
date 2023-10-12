@@ -1,9 +1,10 @@
 
 /**
- * Main class that handles map generation, as well as singleplay turns.
+ * Main class that handles game.
  *
  * @Alex Anderson (your name)
- * @Version 4 - Flags - In this version the player can place flags down, with more input options.
+ * @Version 5 - Final Game - finishing touchers fully commented.
+ * @Java
  */
 
 //import package for input reading.
@@ -20,31 +21,38 @@ public class main
     //declare variables used stats, and game checking functions.
     public int turnCount;
     private boolean gameEnded;
+    public String answer;
     //creates object for keyboard input
     Scanner input = new Scanner(System.in);
     
-    //creates empty maps, displays them, and asks player for input.
+    //when class is called, start a new game.
     public main()
     {   
-        map = new char[18][14];
-        playersMap = new char[18][14];
         startGame();
     }
     
+    //creates empty maps, displays them, and asks player for input.
     public void startGame(){
+        //creating new maps out of 2D arrays
+        map = new char[18][14];
+        playersMap = new char[18][14];
+        
         //fills in player map with unchecked boxes for display, for first turn.
         for(int x=0;x<18;x++){
            for(int y=0;y<14;y++){
                playersMap[x][y] = '■';
            }
         }
+        
+        //resets variables to manage game.
         turnCount = 0; 
+        gameEnded = false;
         //displays map, then asks for players input.
         drawMap();
         getPlayerInput();
     }
     
-    //gets player input then seperates the two coordinates.
+    //gets player input then seperates the two coordinates player has entered as one string.
     public void getPlayerInput(){
             
         //prints out instructions, then takes input
@@ -59,7 +67,7 @@ public class main
         String last = "";
         int letterUpTo = 0;
         
-        //loop runs until first coordinate is found, or it gets to the end and there's no comma to seperate.
+        //loop runs until first coordinate is found in the players input, or it gets to the end and there's no comma to seperate.
         while((!commaFound)&&(letterUpTo < playerInput.length())){
             //if comma is found, stop the loop then record the two coordinates.
             if(playerInput.charAt(letterUpTo) == ','){
@@ -78,19 +86,21 @@ public class main
             letterUpTo++;
         }
         
-        //if nothing was found, tell player that then retry the function for input.
+        //if no comma to seperate the two coordinates were found, tell player that, then retry the function for input.
         if((letterUpTo <= playerInput.length())&&(!commaFound)){
             System.out.println("Please try again: seperate the two coordinates with a comma.");
             getPlayerInput();
         }
     }
     
-    //function that checks what is passed through is acceptable.
+    //function that checks what is passed through is acceptable as player input.
     public void verifyInput(String firstHalf,String secondHalf){
         int x;
         int y;
+        //boolean that check if the players input is intended for placing down a flag.
         boolean flagCheck = false;
-
+        
+        //if the first charecter is an 'f' then accept whatever input after it as the coordinates for flag.
         if((firstHalf.charAt(0) == 'f')){
             String newFirst = "";
             flagCheck = true;
@@ -103,9 +113,9 @@ public class main
                      newFirst += firstHalf.charAt(i);
                 }
             }
+            //set the new first coordinate to the same as it was, this time without the 'f'.
             firstHalf = newFirst;
         }
-        
         
         //checks that both coordinates are digits, and aren't empty. 
         //also checks that the string length is two or less so it can be converted to int without error.
@@ -115,10 +125,9 @@ public class main
             y = Integer.parseInt(secondHalf);
             //checks they aren't to big for the map.
             if((x<18)&&(y<14)){
-                
-                
-                //passes turn to function that changes the map.
+                //checks if it was intended to be a flag by player
                 if(flagCheck){
+                    //these toggle the flag on and off.
                     if(playersMap[x][y] == '■'){
                        playersMap[x][y] = '◘'; 
                        drawMap();
@@ -127,28 +136,24 @@ public class main
                             playersMap[x][y] = '■';
                             drawMap();
                         }else{
+                            //if player tries to place flag on already uncovered lot, show this message.
                             System.out.println("You already have uncovered that, try placing a flag somewhere else!");
                         }
                     }
-                    
-                    
                 }else{
                     //if it is the first turn, passes through function that generates map.
                     if(turnCount==0){
-                       generateMap(x,y); 
-                     
+                        generateMap(x,y); 
                     }
+                    //passes final coordinates through function that computes the play.
                     playTurn(x,y);
-                    
                 }   
-                
-                      
             }else{
-                //if inputs are out of map bounds, reask.
+                //if inputs are out of map bounds, re-ask.
                 System.out.println("Please choose coordinates inbetween 0 - 17, and 0 - 13.");
             }
         }else{
-            //if it is invalid, reask.
+            //if input is otherwise invalid, re-ask.
             System.out.println("Please re-enter your turn. It cannot contain letters or brackets, just numbers.");
         }
         //as long as game hasn't been won or lost, get player input again.
@@ -161,7 +166,8 @@ public class main
     public void drawMap(){
         //clears the screen
         System.out.print('\u000C');
-        
+        //some decrotive touches
+        System.out.println("-------------------- SWEEPING MINES --------------------");
         //formats and displays collumn numbers 0 - 18
         System.out.println();
         System.out.print("    ");
@@ -212,7 +218,7 @@ public class main
         int randomX;
         //System.out.println("clicked at: "+xStart+","+yStart);
         //while all mines aren't placed yet, try to set different map spots to a mine, if it's not adjacent or where player clicked.
-        for(int minesUnplaced=20;minesUnplaced>0;minesUnplaced--){
+        for(int minesUnplaced=11;minesUnplaced>0;minesUnplaced--){
             //generate random x and y in map bounds
             randomX = (int)Math.floor(Math.random()*18);
             randomY = (int)Math.floor(Math.random()*14);
@@ -253,7 +259,6 @@ public class main
                        //if it is a number, increment it by one.
                        map[i][t] += 1;
                    }
-                   
                }
             }
         }
@@ -261,7 +266,7 @@ public class main
     
     //this function processes the turn with checks to see what the player has uncovered.
     public void playTurn(int clickedX,int clickedY){
-        //tests to see where player clicked
+        //tests to see where player selected
         if(map[clickedX][clickedY] == 'o'){
             //player has found a mine, they lost.
             //set what players see to the whole map, to show them.
@@ -270,49 +275,58 @@ public class main
             //displays the map
             drawMap();
             gameEnded=true;
-            System.out.println("YOU BLEW UP! Would you like to play again? ('y' or 'n'");
-            playAgain();
-           
-            
-            
+            System.out.println("YOU BLEW UP! Unlucky.");        
         }else if(map[clickedX][clickedY] == '■'){
             //start recursive function which discovers and uncovers empty squares until it finds a number on all sides.
             turnCount++;
             discoverSquares(clickedX,clickedY);
             drawMap(); 
+            hasWon();
         }else if((map[clickedX][clickedY] == '□')||(playersMap[clickedX][clickedY] != '■')){
             //player has selected an already empty square OR player has selected a flag over a number
             if(playersMap[clickedX][clickedY] != '◘'){
+                //player has selected already searched plot.
                 System.out.println("You've already searched there. Please try again (CODE FLAG)");
             }else{
+                //player has selected a plot with a number, and a flag over it.
                 turnCount++;
                 playersMap[clickedX][clickedY] = map[clickedX][clickedY];
                 drawMap();
+                hasWon();
             }
-            
         }else{
             //if a player selects a number, just that number will show.
             turnCount++;
             playersMap[clickedX][clickedY] = map[clickedX][clickedY];
             drawMap();
+            hasWon();
         }
     }
     
-    public void playAgain(){
-        switch(input.nextLine()){
-            case "y": 
-                //new game starting
-                startGame();
-                break;
-                    
-            case "n": 
-                //end program
-                //stops turn looping
-                break;
-                    
-            default: 
-                System.out.println("Please re-enter your answer. 'y' or 'n'.");
-                playAgain();
+    //checks if player has won
+    public void hasWon(){
+        //sets up temporary variable
+        boolean won = true;
+        //checks through the map array
+        for(int x=0;x<18;x++){
+            for(int y=0;y<14;y++){
+                //if where mines are not placed...
+                if(map[x][y] != 'o'){
+                    //the player does not have anythin covering it...
+                    if((playersMap[x][y] != '■')&&(playersMap[x][y] != '◘')){
+                        //then they are all good so far
+                    }else{
+                        //cant have won as unchecked box has been found.
+                        won = false;
+                    }
+                }
+            }
+        }
+        //if there were no unchecked sqaures player has won.
+        if(won){
+            gameEnded = true;
+            //ask player for rematch.
+            System.out.println("YOU WON! Congrats!");
         }
     }
     
@@ -329,8 +343,10 @@ public class main
                 if(((i>=0)&&(t>=0))&&((i<18)&&(t<14))){
                     if(map[i][t] == '■'){
                         //if it is another empty square then run this function again with that square
+                        //sets found square to empty
                         map[i][t] = '□';
                         playersMap[i][t] = '□';
+                        //re-runs the function, with found one this time.
                         discoverSquares(i,t);
                     }else if((map[i][t] != 'o')&&(map[i][t] != '□')){
                         //if it's a number then show the number and stop there.

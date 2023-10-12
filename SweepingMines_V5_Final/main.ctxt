@@ -21,5 +21,5 @@ comment7.target=void\ genNumbersAround(int,\ int)
 comment8.params=clickedX\ clickedY
 comment8.target=void\ playTurn(int,\ int)
 comment9.params=
-comment9.target=void\ playAgain()
+comment9.target=void\ hasWon()
 numComments=12
